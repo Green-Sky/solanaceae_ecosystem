@@ -17,9 +17,10 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
+        fetch-depth: 0
 
     - name: Install Dependencies
       run: sudo apt update && sudo apt -y install libsodium-dev
@@ -33,15 +34,7 @@ jobs:
     - name: Determine tag name
       id: tag
       shell: bash
-      # taken from llama.cpp
-      run: |
-        SHORT_HASH="$(git rev-parse --short=7 HEAD)"
-        if [[ "${{ env.BRANCH_NAME }}" == "master" ]]; then
-          echo "name=dev-${SHORT_HASH}" >> $GITHUB_OUTPUT
-        else
-          SAFE_NAME=$(echo "${{ env.BRANCH_NAME }}" | tr '/' '-')
-          echo "name=dev-${SAFE_NAME}-${SHORT_HASH}" >> $GITHUB_OUTPUT
-        fi
+      run: . .github/workflows/tag_version.bash
 
     - name: Compress artifacts
       shell: bash
@@ -68,9 +61,10 @@ jobs:
         os: ['windows-2022']
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
+        fetch-depth: 0
 
     - name: Restore vcpkg cache
       id: vcpkg-cache
@@ -99,15 +93,7 @@ jobs:
     - name: Determine tag name
       id: tag
       shell: bash
-      # taken from llama.cpp
-      run: |
-        SHORT_HASH="$(git rev-parse --short=7 HEAD)"
-        if [[ "${{ env.BRANCH_NAME }}" == "master" ]]; then
-          echo "name=dev-${SHORT_HASH}" >> $GITHUB_OUTPUT
-        else
-          SAFE_NAME=$(echo "${{ env.BRANCH_NAME }}" | tr '/' '-')
-          echo "name=dev-${SAFE_NAME}-${SHORT_HASH}" >> $GITHUB_OUTPUT
-        fi
+      run: . .github/workflows/tag_version.bash
 
     - name: Clean temporary artifacts
       # msvc sometimes produces .ilk files, which are used for linking only
@@ -144,22 +130,15 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
+        fetch-depth: 0
 
     - name: Determine tag name
       id: tag
       shell: bash
-      # taken from llama.cpp
-      run: |
-        SHORT_HASH="$(git rev-parse --short=7 HEAD)"
-        if [[ "${{ env.BRANCH_NAME }}" == "master" ]]; then
-          echo "name=dev-${SHORT_HASH}" >> $GITHUB_OUTPUT
-        else
-          SAFE_NAME=$(echo "${{ env.BRANCH_NAME }}" | tr '/' '-')
-          echo "name=dev-${SAFE_NAME}-${SHORT_HASH}" >> $GITHUB_OUTPUT
-        fi
+      run: . .github/workflows/tag_version.bash
 
     - name: Download artifacts
       id: download-artifact
