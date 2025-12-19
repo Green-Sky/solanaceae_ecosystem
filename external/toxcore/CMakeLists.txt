@@ -39,6 +39,16 @@ configure_file(
 	@ONLY
 )
 configure_file(
+	./c-toxcore/toxcore/tox_log_level.h
+	${CMAKE_CURRENT_BINARY_DIR}/include/tox/tox_log_level.h
+	@ONLY
+)
+configure_file(
+	./c-toxcore/toxcore/tox_options.h
+	${CMAKE_CURRENT_BINARY_DIR}/include/tox/tox_options.h
+	@ONLY
+)
+configure_file(
 	./c-toxcore/toxcore/tox_private.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/tox/tox_private.h
 	@ONLY

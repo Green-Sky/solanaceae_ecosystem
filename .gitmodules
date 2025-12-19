@@ -16,7 +16,6 @@
 [submodule "external/toxcore/c-toxcore"]
 	path = external/toxcore/c-toxcore
 	url = https://github.com/Green-Sky/c-toxcore.git
-	branch = ngc_events
 [submodule "external/solanaceae_toxcore"]
 	path = external/solanaceae_toxcore
 	url = https://github.com/Green-Sky/solanaceae_toxcore.git
