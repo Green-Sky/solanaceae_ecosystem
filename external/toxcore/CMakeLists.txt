@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13...3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18...3.24 FATAL_ERROR)
 
 set(EXPERIMENTAL_API ON CACHE BOOL "" FORCE)
 set(UNITTEST OFF CACHE BOOL "" FORCE)
