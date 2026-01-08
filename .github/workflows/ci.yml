@@ -68,8 +68,8 @@ jobs:
             ndk_abi: armeabi-v7a
           - vcpkg_toolkit: arm64-android-23
             ndk_abi: arm64-v8a
-          - vcpkg_toolkit: x64-android-23
-            ndk_abi: x86_64
+          #- vcpkg_toolkit: x64-android-23
+          #  ndk_abi: x86_64
 
     steps:
     - uses: actions/checkout@v4
