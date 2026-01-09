@@ -49,6 +49,42 @@ jobs:
         path: |
           ${{github.workspace}}/${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-ubuntu24.04-x86_64.tar.gz
 
+  linux-debian12:
+    timeout-minutes: 10
+
+    runs-on: ubuntu-latest
+    container: debian:12
+
+    steps:
+    - name: Install Dependencies
+      run: apt update && apt -y install git build-essential pkg-config cmake ninja-build libsodium-dev libssl-dev
+
+    - uses: actions/checkout@v5
+      with:
+        submodules: recursive
+        fetch-depth: 0
+
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_C_FLAGS=-gz -DCMAKE_CXX_FLAGS=-gz -DCMAKE_EXE_LINKER_FLAGS=-gz
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j 4
+
+    - name: Determine tag name
+      id: tag
+      shell: bash
+      run: . .github/workflows/tag_version.bash
+
+    - name: Compress artifacts
+      shell: bash
+      run: |
+        tar -czvf ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-debian12-x86_64.tar.gz -C ${{github.workspace}}/build/bin/ .
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-debian12-x86_64
+        path: |
+          ${{github.workspace}}/${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-debian12-x86_64.tar.gz
 
   windows:
     timeout-minutes: 15
@@ -124,6 +160,7 @@ jobs:
 
     needs:
       - linux-ubuntu
+      - linux-debian12
       - windows
 
     permissions:

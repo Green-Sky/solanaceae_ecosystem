@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
 
@@ -42,7 +42,7 @@ jobs:
     - name: Install Dependencies
       run: apt update && apt -y install git build-essential pkg-config cmake ninja-build libsodium-dev libssl-dev
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
 
@@ -72,11 +72,11 @@ jobs:
           #  ndk_abi: x86_64
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         repository: 'Green-Sky/vcpkg_android_triplets'
         path: 'vcpkg_android_triplets'
@@ -135,7 +135,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
 
@@ -157,7 +157,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         submodules: recursive
 
