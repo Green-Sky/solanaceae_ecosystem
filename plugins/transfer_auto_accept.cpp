@@ -78,7 +78,7 @@ void TransferAutoAccept::checkObj(ObjectHandle o) {
 		return;
 	}
 
-	const auto save_dir_path = _conf.get_string("TransferAutoAccept", "save_path").value_or("tmp_save_dir");
+	const std::string save_dir_path = _conf.get_string("TransferAutoAccept", "save_path").value_or("tmp_save_dir");
 	uint64_t total_size {0u};
 	if (const auto* si = o.try_get<ObjComp::F::SingleInfo>(); si != nullptr) {
 		if (si->file_name.empty()) {
