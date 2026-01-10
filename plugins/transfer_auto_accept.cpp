@@ -8,6 +8,7 @@
 
 #include <solanaceae/util/config_model.hpp>
 
+#include <filesystem>
 #include <iostream>
 
 TransferAutoAccept::TransferAutoAccept(ObjectStore2& os, RegistryMessageModelI& rmm, ConfigModelI& conf) : _os(os), _rmm(rmm), _conf(conf) {
@@ -77,17 +78,23 @@ void TransferAutoAccept::checkObj(ObjectHandle o) {
 		return;
 	}
 
+	const auto save_dir_path = _conf.get_string("TransferAutoAccept", "save_path").value_or("tmp_save_dir");
 	uint64_t total_size {0u};
 	if (const auto* si = o.try_get<ObjComp::F::SingleInfo>(); si != nullptr) {
 		if (si->file_name.empty()) {
 			return; // bad file
 		}
 		total_size = si->file_size;
+		if (std::filesystem::exists(std::filesystem::path(save_dir_path) / si->file_name)) {
+			return; // pre existing, dont auto
+		}
 	} else if (const auto* ci = o.try_get<ObjComp::F::CollectionInfo>(); ci != nullptr) {
 		if (ci->file_list.empty() || ci->file_list.front().file_name.empty()) {
 			return; // bad file
 		}
 		total_size = ci->total_size;
+
+		return; // TODO: figure out a collection strategy
 	}
 
 	//const auto& file_info = h.get<Message::Components::Transfer::FileInfo>();
