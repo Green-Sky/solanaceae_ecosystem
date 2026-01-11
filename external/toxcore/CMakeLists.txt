@@ -54,15 +54,20 @@ configure_file(
 	@ONLY
 )
 configure_file(
+	./c-toxcore/toxcore/attributes.h # for tox_private.h
+	${CMAKE_CURRENT_BINARY_DIR}/include/tox/attributes.h
+	@ONLY
+)
+configure_file(
 	./c-toxcore/toxencryptsave/toxencryptsave.h
 	${CMAKE_CURRENT_BINARY_DIR}/include/tox/toxencryptsave.h
 	@ONLY
 )
-#configure_file(
-#    ./c-toxcore/toxav/toxav.h
-#    ${CMAKE_CURRENT_BINARY_DIR}/include/tox/toxav.h
-#    @ONLY
-#)
+configure_file(
+	./c-toxcore/toxav/toxav.h
+	${CMAKE_CURRENT_BINARY_DIR}/include/tox/toxav.h
+	@ONLY
+)
 
 target_include_directories(toxcore INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include/)
 
