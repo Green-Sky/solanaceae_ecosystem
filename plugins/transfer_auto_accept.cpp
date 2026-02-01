@@ -74,7 +74,7 @@ void TransferAutoAccept::checkObj(ObjectHandle o) {
 
 	// dont touch avatars for now
 	// TODO: more generic file types??
-	if (const auto* fk = o.try_get<ObjComp::Tox::FileKind>(); fk != nullptr && fk->kind != 0) {
+	if (const auto* fk = o.try_get<ObjComp::Tox::FileKind>(); fk != nullptr && (fk->kind != 0 && fk->kind != 2 && fk->kind != 3 && fk->kind != 4)) {
 		return;
 	}
 
@@ -82,7 +82,7 @@ void TransferAutoAccept::checkObj(ObjectHandle o) {
 	uint64_t total_size {0u};
 	if (const auto* si = o.try_get<ObjComp::F::SingleInfo>(); si != nullptr) {
 		if (si->file_name.empty()) {
-			return; // bad file
+			return; // bad or non- file
 		}
 		total_size = si->file_size;
 		if (std::filesystem::exists(std::filesystem::path(save_dir_path) / si->file_name)) {
