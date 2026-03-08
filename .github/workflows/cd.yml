@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
         fetch-depth: 0
@@ -41,7 +41,7 @@ jobs:
       run: |
         tar -czvf ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-ubuntu24.04-x86_64.tar.gz -C ${{github.workspace}}/build/bin/ .
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         # TODO: simpler name?
         name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-ubuntu24.04-x86_64
@@ -60,7 +60,7 @@ jobs:
     - name: Install Dependencies
       run: apt update && apt -y install git build-essential pkg-config cmake ninja-build libsodium-dev libssl-dev
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
         fetch-depth: 0
@@ -84,7 +84,7 @@ jobs:
       run: |
         tar -czvf ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-debian12-x86_64.tar.gz -C ${{github.workspace}}/build/bin/ .
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-debian12-x86_64
         path: |
@@ -101,7 +101,7 @@ jobs:
         os: ['windows-2022']
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
         fetch-depth: 0
@@ -149,7 +149,7 @@ jobs:
     # TODO: add asan runtime dep ?
     # only needed by totato, loading asan in non asan host is incompatible anyway
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         # TODO: simpler name?
         name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-msvc${{matrix.type == 'asan' && '-asan' || ''}}-x86_64
@@ -171,7 +171,7 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         submodules: recursive
         fetch-depth: 0
@@ -183,7 +183,7 @@ jobs:
 
     - name: Download artifacts
       id: download-artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v7
       with:
         path: ./artifacts/
 
