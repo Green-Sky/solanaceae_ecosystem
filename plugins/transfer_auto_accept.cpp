@@ -7,6 +7,7 @@
 #include <solanaceae/tox_messages/obj_components.hpp>
 
 #include <solanaceae/util/config_model.hpp>
+#include <solanaceae/util/file_path_sanitizer.hpp>
 
 #include <filesystem>
 #include <iostream>
@@ -85,7 +86,7 @@ void TransferAutoAccept::checkObj(ObjectHandle o) {
 			return; // bad or non- file
 		}
 		total_size = si->file_size;
-		if (std::filesystem::exists(std::filesystem::path(save_dir_path) / si->file_name)) {
+		if (std::filesystem::exists(std::filesystem::path(save_dir_path) / sanitize_file_name(si->file_name))) {
 			return; // pre existing, dont auto
 		}
 	} else if (const auto* ci = o.try_get<ObjComp::F::CollectionInfo>(); ci != nullptr) {
