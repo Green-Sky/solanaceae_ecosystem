@@ -157,6 +157,49 @@ jobs:
         path: |
           ${{github.workspace}}/${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-msvc${{matrix.type == 'asan' && '-asan' || ''}}-x86_64.zip
 
+  dumpsyms:
+    runs-on: ubuntu-slim
+
+    needs:
+      - linux-ubuntu
+      - linux-debian12
+      - windows
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Determine tag name
+        id: tag
+        shell: bash
+        run: . .github/workflows/tag_version.bash
+
+      - name: Install Dependencies
+        run: sudo apt update && sudo apt -y install unar
+
+      - name: Install dump_syms
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/mozilla/dump_syms/releases/download/v2.3.9/dump_syms-installer.sh | sh
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts/
+
+      - name: Dump symbols
+        shell: bash
+        env:
+          TAG_NAME: ${{ steps.tag.outputs.name }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: . .github/workflows/dump_syms.bash
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-symbol_stores
+          path: ./sym-stores/
+
   release:
     if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) }}
 
@@ -166,6 +209,7 @@ jobs:
       - linux-ubuntu
       - linux-debian12
       - windows
+      - dumpsyms
 
     permissions:
       contents: write
